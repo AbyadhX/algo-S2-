@@ -57,8 +57,16 @@ def __addBSTSize(x, A):
     return (bintree, booelan)
     boolean: boolean: is the insertion occurred?
     """
-    # FIXME
-    pass
+    if A == None:
+        return (BinTreeSize(x, None, None, 1), True)
+    else:
+        if x <= A.key:
+            (A.left, inserted) = __addBSTSize(x, A.left)
+        else:
+            (A.right, inserted) = __addBSTSize(x, A.right)
+        if inserted:
+            A.size += 1
+        return (A, inserted)
 
 def addBSTSize(B, x):
     (B, _) = __addBSTSize(x, B)
@@ -68,12 +76,32 @@ def addBSTSize(B, x):
 # median
         
 def nthBST(B, k):
-    # FIXME
-    pass
+    if B.left == None:
+        leftSize = 0
+    else:
+        leftSize = B.left.size
+        
+    if leftSize == k - 1:
+        return B
+    elif k <= leftSize:
+        return nthBST(B.left, k)
+    else:
+        return nthBST(B.right, k - leftSize - 1)            
 
-
-            
-            
+def nthBST2(B, k):
+    if B.left == None:
+        if k == 1:
+            return B
+        else:
+            return nthBST2(B.right, k - 1)
+    else:
+        if k == B.left.size + 1:
+            return B
+        elif k <= B.left.size:
+            return nthBST2(B.left, k)
+        else:
+            return nthBST2(B.right, k - B.left.size - 1)
+        
 def median(B):
     if B != None:
         return nthBST(B, (B.size+1) // 2).key
